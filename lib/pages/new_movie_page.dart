@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../models/movie_models.dart';
+import '../utils/helper_functions.dart';
+import '../utils/utils.dart';
+
 
 class AddNewMoviePage extends StatefulWidget {
   static const String routeName='/movie_add';

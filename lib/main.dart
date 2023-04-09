@@ -1,3 +1,9 @@
+import 'package:flutter/material.dart';
+
+import 'pages/movie_details.dart';
+import 'pages/movie_list.dart';
+import 'pages/new_movie_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
