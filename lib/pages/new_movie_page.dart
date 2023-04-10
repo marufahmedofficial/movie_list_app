@@ -1,12 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:provider/provider.dart';
 import '../models/movie_model.dart';
+import '../providers/movie_provider.dart';
 import '../utils/helper_functions.dart';
 import '../utils/utils.dart';
-
 
 class AddNewMoviePage extends StatefulWidget {
   static const String routeName='/movie_add';
@@ -19,6 +18,7 @@ class AddNewMoviePage extends StatefulWidget {
 
 class _AddNewMoviePageState extends State<AddNewMoviePage> {
 
+  late MovieProvider movieProvider;
   final _fromKey=GlobalKey<FormState>();
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -29,6 +29,13 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
 
 
 
+  @override
+  void didChangeDependencies() {
+
+    movieProvider=Provider.of(context,listen: false);
+
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
@@ -43,7 +50,7 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
       appBar: AppBar(title: Text('Add New Movie'),
         actions: [
           IconButton(
-              onPressed: onSaved,
+              onPressed: saveMovie,
               icon: Icon(Icons.save))
         ],
       ),
@@ -198,18 +205,34 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
     }
   }
 
-  void onSaved() {
-    if(_fromKey.currentState!.validate()){
-      final movieModel=MovieModel(
+  void saveMovie() {
+    if (releaseDate == null) {
+      showMsg(context, 'Please select a date');
+      return;
+    }
+    if (imagePath == null) {
+      showMsg(context, 'Please select an image');
+      return;
+    }
+    if (_fromKey.currentState!.validate()) {
+
+      final movie = MovieModel(
         name: nameController.text,
         image: imagePath!,
-        budget: int.parse(budgetController.text),
         description: descriptionController.text,
-        release_date: getFormattedDate(releaseDate!, 'dd/MM/yyyy'),
+        budget: int.parse(budgetController.text),
         type: selectedType!,
-        rating: 4.4,
+        release_date: getFormattedDate(releaseDate!, 'dd/MM/yyyy'),
       );
-      print(movieModel.toString());
+
+      movieProvider
+          .insertMovie(movie)
+          .then((value) {
+        movieProvider.getAllMovies();
+        Navigator.pop(context);
+      }).catchError((error) {
+        print(error.toString());
+      });
 
     }
   }

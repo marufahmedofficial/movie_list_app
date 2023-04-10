@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/movie_provider.dart';
 import 'new_movie_page.dart';
 
 class MovieListPage extends StatefulWidget {
@@ -21,6 +25,21 @@ class _MovieListPageState extends State<MovieListPage> {
         child: Icon(Icons.add),
       ),
       appBar: AppBar(title: Text('Movie List'),),
+      body: Consumer<MovieProvider>(
+        builder: (context, provider, child) => ListView.builder(
+          itemCount: provider.movieList.length,
+          itemBuilder: (context, index) {
+            final movie = provider.movieList[index];
+            return ListTile(
+              leading:
+              Image.file(File(movie.image),
+                width: 100, height: 100, fit: BoxFit.cover,),
+              title: Text(movie.name),
+              subtitle: Text(movie.type),
+            );
+          },
+        ),
+      ),
     );
   }
 }
