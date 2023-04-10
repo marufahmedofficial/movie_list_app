@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'pages/movie_details.dart';
 import 'pages/movie_list.dart';
 import 'pages/new_movie_page.dart';
+import 'providers/movie_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => MovieProvider()),
+      ],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +20,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Movie List App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -29,5 +33,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
