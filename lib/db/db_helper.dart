@@ -1,6 +1,11 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as Path;
 
+import '../models/movie_favorite.dart';
+import '../models/movie_model.dart';
+import '../models/movie_rating.dart';
+import '../models/user_model.dart';
+
 
 
 class DbHelper {
