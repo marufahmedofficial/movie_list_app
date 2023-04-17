@@ -40,6 +40,7 @@ dependencies:
   intl:
   provider:
   shared_preferences:
+  flutter_rating_bar: ^4.0.1
 
 
 dev_dependencies:
