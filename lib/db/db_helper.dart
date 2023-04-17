@@ -7,9 +7,6 @@ import '../models/movie_rating.dart';
 import '../models/user_model.dart';
 
 
-
-
-
 class DbHelper {
   static const String createTableMovie = '''create table $tableMovie(
   $tblMovieColId integer primary key autoincrement,
@@ -66,10 +63,22 @@ class DbHelper {
     return db.insert(tableUser, userModel.toMap());
   }
 
+  static Future<int> insertRating(MovieRating movieRating) async {
+    final db = await open();
+    return db.insert(tableRating, movieRating.toMap());
+  }
+
   static Future<int> updateMovie(MovieModel movieModel) async {
     final db = await open();
     return db.update(tableMovie, movieModel.toMap(),
       where: '$tblMovieColId = ?', whereArgs: [movieModel.id],);
+  }
+
+  static Future<int> updateRating(MovieRating movieRating) async {
+    final db = await open();
+    return db.update(tableRating, movieRating.toMap(),
+        where: '$tblRatingColMovieId = ? and $tblRatingColUserId = ?',
+        whereArgs: [movieRating.movie_id, movieRating.user_id]);
   }
 
   static Future<List<MovieModel>> getAllMovies() async {
@@ -86,6 +95,14 @@ class DbHelper {
     return MovieModel.fromMap(mapList.first);
   }
 
+  static Future<bool> didUserRate(int movieId, int userId) async {
+    final db = await open();
+    final mapList = await db.query(tableRating,
+        where: '$tblRatingColMovieId = ? and $tblRatingColUserId = ?',
+        whereArgs: [movieId, userId]);
+    return mapList.isNotEmpty;
+  }
+
   static Future<UserModel?> getUserByEmail(String email) async {
     final db = await open();
     final mapList = await db.query(tableUser,
@@ -99,6 +116,17 @@ class DbHelper {
     final mapList = await db.query(tableUser,
       where: '$tblUserColId = ?', whereArgs: [id],);
     return UserModel.fromMap(mapList.first);
+  }
+
+  static Future<List<Map<String, dynamic>>> getCommentsByMovieId(int id) async {
+    final db = await open();
+    return db.rawQuery('select a.movie_id, a.user_id, a.rating, a.rating_date, a.user_reviews, b.email from $tableRating a inner join $tableUser b where a.user_id = b.user_id and a.movie_id = $id');
+  }
+
+  static Future<Map<String, dynamic>> getAvgRatingByMovieId(int id) async {
+    final db = await open();
+    final mapList = await db.rawQuery('SELECT AVG($tblColRating) as $avgRating FROM $tableRating WHERE $tblRatingColMovieId = $id');
+    return mapList.first;
   }
 
   static Future<int> deleteMovie(int id) async {
