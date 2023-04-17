@@ -6,7 +6,7 @@ const String tblColRating='rating';
 const String tableRating='tbl_rating';
 
 class MovieRating{
-  int? movie_id;
+  int movie_id;
   int user_id;
   String rating_date;
   String user_reviews;
@@ -14,7 +14,7 @@ class MovieRating{
 
   MovieRating(
       {
-        this.movie_id,
+        required this.movie_id,
         required this.user_id,
         required this.rating_date,
         required this.user_reviews,
