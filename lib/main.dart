@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: MovieListPage.routeName,
+      initialRoute: LauncherPage.routeName,
       routes: {
         MovieListPage.routeName:(context)=> const MovieListPage(),
         AddNewMoviePage.routeName:(context)=> const AddNewMoviePage(),
