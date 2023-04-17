@@ -32,11 +32,11 @@ class MovieRating{
 
   factory MovieRating.fromMap(Map<String, dynamic> map) =>
       MovieRating(
-    movie_id : map[tblRatingColMovieId],
-    user_id : map[tblRatingColUserId],
-    rating_date : map[tblRatingColDate],
-    user_reviews : map[tblRatingColUserReviews],
-    rating : map[tblColRating],
-  );
+        movie_id : map[tblRatingColMovieId],
+        user_id : map[tblRatingColUserId],
+        rating_date : map[tblRatingColDate],
+        user_reviews : map[tblRatingColUserReviews],
+        rating : map[tblColRating],
+      );
 
 }

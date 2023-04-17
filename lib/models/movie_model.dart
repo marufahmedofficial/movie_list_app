@@ -19,13 +19,13 @@ class MovieModel{
 
   MovieModel(
       {this.id,
-     required this.name,
-     required this.image,
-     required this.description,
-     required this.budget,
-     required this.type,
-     required this.release_date,
-     });
+        required this.name,
+        required this.image,
+        required this.description,
+        required this.budget,
+        required this.type,
+        required this.release_date,
+      });
 
   Map<String,dynamic> toMap(){
     final map=<String,dynamic>{
@@ -43,12 +43,12 @@ class MovieModel{
   }
 
   factory MovieModel.fromMap(Map<String,dynamic> map) => MovieModel(
-      id: map[tblMovieColId],
-      name: map[tblMovieColName],
-      image: map[tblMovieColImage],
-      description: map[tblMovieColDes],
-      budget: map[tblMovieColBudget],
-      type: map[tblMovieColType],
-      release_date: map[tblMovieColRelease],);
+    id: map[tblMovieColId],
+    name: map[tblMovieColName],
+    image: map[tblMovieColImage],
+    description: map[tblMovieColDes],
+    budget: map[tblMovieColBudget],
+    type: map[tblMovieColType],
+    release_date: map[tblMovieColRelease],);
 
 }
