@@ -39,6 +39,7 @@ dependencies:
   image_picker:
   intl:
   provider:
+  shared_preferences:
 
 
 dev_dependencies:
