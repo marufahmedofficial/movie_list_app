@@ -5,6 +5,7 @@ import '../models/movie_favorite.dart';
 import '../models/movie_model.dart';
 import '../models/movie_rating.dart';
 import '../models/user_model.dart';
+import '../utils/utils.dart';
 
 
 class DbHelper {

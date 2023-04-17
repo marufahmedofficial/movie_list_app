@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/movie_rating.dart';
 import '../providers/user_provider.dart';
 import '../utils/helper_functions.dart';
+import '../utils/utils.dart';
 
 class RatingCommentWidget extends StatefulWidget {
   final int movieId;
