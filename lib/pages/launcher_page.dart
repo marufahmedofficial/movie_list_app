@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 import '../utils/helper_functions.dart';
+import 'login_page.dart';
 import 'movie_list.dart';
 class LauncherPage extends StatefulWidget {
   static const String routeName = '/launcher';

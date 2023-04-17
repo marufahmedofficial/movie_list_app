@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/movie_model.dart';
 import '../providers/movie_provider.dart';
+import '../providers/user_provider.dart';
 import 'new_movie_page.dart';
 
 class MovieDetailsPage extends StatefulWidget {
@@ -18,10 +19,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   int? id;
   late String name;
   late MovieProvider provider;
+  late UserProvider userProvider;
 
   @override
   void didChangeDependencies() {
     provider = Provider.of<MovieProvider>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
     final argList = ModalRoute.of(context)!.settings.arguments as List;
     id = argList[0];
     name = argList[1];
@@ -33,7 +36,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
-        actions: [
+        actions: userProvider.userModel.isAdmin ? [
           IconButton(
             onPressed: () => Navigator.pushNamed(
                 context, AddNewMoviePage.routeName, arguments: id)
@@ -46,7 +49,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
             onPressed: _deleteMovie,
             icon: const Icon(Icons.delete),
           ),
-        ],
+        ] : null,
       ),
       body: Center(
         child: FutureBuilder<MovieModel>(
