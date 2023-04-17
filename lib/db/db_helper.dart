@@ -37,7 +37,6 @@ class DbHelper {
 
 
   static Future<Database> open() async {
-
     final rootPath = await getDatabasesPath();
     final dbPath = Path.join(rootPath, 'movie_db');
 
@@ -54,11 +53,29 @@ class DbHelper {
     return db.insert(tableMovie, movieModel.toMap());
   }
 
-  static Future<List<MovieModel>> getAllMovies() async {
+  static Future<int> updateMovie(MovieModel movieModel) async {
+    final db = await open();
+    return db.update(tableMovie, movieModel.toMap(),
+      where: '$tblMovieColId = ?', whereArgs: [movieModel.id],);
+  }
 
+  static Future<List<MovieModel>> getAllMovies() async {
     final db = await open();
     final mapList = await db.query(tableMovie);
     return List.generate(mapList.length, (index) =>
         MovieModel.fromMap(mapList[index]));
+  }
+
+  static Future<MovieModel> getMovieById(int id) async {
+    final db = await open();
+    final mapList = await db.query(tableMovie,
+      where: '$tblMovieColId = ?', whereArgs: [id],);
+    return MovieModel.fromMap(mapList.first);
+  }
+
+  static Future<int> deleteMovie(int id) async {
+    final db = await open();
+    return db.delete(tableMovie,
+      where: '$tblMovieColId = ?', whereArgs: [id],);
   }
 }
