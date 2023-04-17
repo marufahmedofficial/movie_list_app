@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../customwidgets/all_comments_widget.dart';
+import '../customwidgets/rating_comment_widget.dart';
 import '../models/movie_model.dart';
 import '../providers/movie_provider.dart';
 import '../providers/user_provider.dart';
+import '../utils/utils.dart';
 import 'new_movie_page.dart';
 
 class MovieDetailsPage extends StatefulWidget {
@@ -36,10 +39,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
-        actions: userProvider.userModel.isAdmin ? [
+        actions: userProvider.userModel.isAdmin
+            ? [
           IconButton(
             onPressed: () => Navigator.pushNamed(
-                context, AddNewMoviePage.routeName, arguments: id)
+                context, AddNewMoviePage.routeName,
+                arguments: id)
                 .then((value) => setState(() {
               name = value as String;
             })),
@@ -49,7 +54,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
             onPressed: _deleteMovie,
             icon: const Icon(Icons.delete),
           ),
-        ] : null,
+        ]
+            : null,
       ),
       body: Center(
         child: FutureBuilder<MovieModel>(
@@ -75,7 +81,19 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             Icons.star,
                             color: Colors.amber,
                           ),
-                          Text('7.6'),
+                          FutureBuilder<Map<String,dynamic>>(
+                            future: userProvider.getAvgRatingByMovieId(id!),
+                            builder:(context, snapshot) {
+                              if(snapshot.hasData) {
+                                final map = snapshot.data!;
+                                return Text('${map[avgRating] ?? 0.0}');
+                              }
+                              if(snapshot.hasError) {
+                                return const Text('Error loading');
+                              }
+                              return const Text('Loading');
+                            },
+                          ),
                         ],
                       )),
                   Padding(
@@ -86,6 +104,28 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(movie.description),
                   ),
+                  if (!userProvider.userModel.isAdmin)
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: RatingCommentWidget(
+                        movieId: id!,
+                        onComplete: () {
+                          setState(() {
+
+                          });
+                        },
+                      ),
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text(
+                      'All Comments',
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  ),
+                  AllCommentsWidget(
+                    movieId: id!,
+                  )
                 ],
               );
             }
@@ -100,25 +140,27 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   void _deleteMovie() {
-    showDialog(context: context, builder: (context) => AlertDialog(
-      title: Text('Delete $name?'),
-      content: Text('Are you sure to delete $name?'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('NO'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            provider.deleteMovie(id!);
-            Navigator.pop(context);
-          },
-          child: const Text('YES'),
-        )
-      ],
-    ));
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Delete $name?'),
+          content: Text('Are you sure to delete $name?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('NO'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                provider.deleteMovie(id!);
+                Navigator.pop(context);
+              },
+              child: const Text('YES'),
+            )
+          ],
+        ));
   }
 }

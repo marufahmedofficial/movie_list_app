@@ -6,6 +6,7 @@ import '../utils/helper_functions.dart';
 import 'launcher_page.dart';
 import '../db/db_helper.dart';
 
+
 class LoginPage extends StatefulWidget {
   static const String routeName = '/login';
 
@@ -48,12 +49,12 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextFormField(
                           controller: emailController,
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.email),
+                              prefixIcon: const Icon(Icons.email),
                               hintText: 'Your Email',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(6),
                                   borderSide:
-                                      const BorderSide(color: Colors.blue, width: 1))),
+                                  const BorderSide(color: Colors.blue, width: 1))),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Email is required';
@@ -82,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(6),
                                   borderSide:
-                                      const BorderSide(color: Colors.blue, width: 1))),
+                                  const BorderSide(color: Colors.blue, width: 1))),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Email is required';
@@ -149,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
           if(pass == user.password) {
             await setLoginStatus(true);
             await setUserId(user.userId!);
-            Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+            if(mounted) Navigator.pushReplacementNamed(context, LauncherPage.routeName);
           } else {
             //password did not match
             _setErrorMsg('Wrong password');
@@ -158,8 +159,10 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         //register btn is clicked
         if(user != null) {
+          //email already exists in table
           _setErrorMsg('User already exists');
         } else {
+          //insert new user
           final user = UserModel(
             email: email,
             password: pass,
@@ -168,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
           final rowId = await provider.insertUser(user);
           await setLoginStatus(true);
           await setUserId(rowId);
-          Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+          if(mounted) Navigator.pushReplacementNamed(context, LauncherPage.routeName);
         }
       }
     }
