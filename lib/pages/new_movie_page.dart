@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/movie_model.dart';
 import '../providers/movie_provider.dart';
@@ -26,14 +27,15 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
   String? selectedType;
   DateTime? releaseDate;
   String? imagePath;
-
-
+  int? id;
 
   @override
   void didChangeDependencies() {
-
     movieProvider=Provider.of(context,listen: false);
-
+    id = ModalRoute.of(context)!.settings.arguments as int?;
+    if(id != null) {
+      _setData();
+    }
     super.didChangeDependencies();
   }
 
@@ -47,11 +49,11 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Add New Movie'),
+      appBar: AppBar(title: Text(id == null ? 'Add New Movie' : 'Update Movie'),
         actions: [
           IconButton(
               onPressed: saveMovie,
-              icon: Icon(Icons.save))
+              icon: Icon(id == null ? Icons.save : Icons.update))
         ],
       ),
       body: Form(
@@ -222,18 +224,39 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
         description: descriptionController.text,
         budget: int.parse(budgetController.text),
         type: selectedType!,
-        release_date: getFormattedDate(releaseDate!, 'dd/MM/yyyy'),
+        release_date: getFormattedDate(releaseDate!, datePattern),
       );
 
-      movieProvider
-          .insertMovie(movie)
-          .then((value) {
-        movieProvider.getAllMovies();
-        Navigator.pop(context);
-      }).catchError((error) {
-        print(error.toString());
-      });
-
+      if(id != null) {
+        movie.id = id;
+        movieProvider
+            .updateMovie(movie)
+            .then((value) {
+          Navigator.pop(context, movie.name);
+        }).catchError((error) {
+          print(error.toString());
+        });
+      } else {
+        movieProvider
+            .insertMovie(movie)
+            .then((value) {
+          movieProvider.getAllMovies();
+          Navigator.pop(context);
+        }).catchError((error) {
+          print(error.toString());
+        });
+      }
     }
+  }
+
+  void _setData() {
+    final movie = movieProvider.getMovieFromList(id!);
+    nameController.text = movie.name;
+    descriptionController.text = movie.description;
+    budgetController.text = movie.budget.toString();
+    selectedType = movie.type;
+    imagePath = movie.image;
+    releaseDate = DateFormat(datePattern).parse(movie.release_date);
+
   }
 }
