@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../customwidgets/all_comments_widget.dart';
 import '../customwidgets/rating_comment_widget.dart';
+import '../models/movie_favorite.dart';
 import '../models/movie_model.dart';
 import '../providers/movie_provider.dart';
 import '../providers/user_provider.dart';
@@ -71,6 +72,30 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     height: 250,
                     fit: BoxFit.cover,
                   ),
+                  FutureBuilder<bool>(
+                    future: userProvider.didUserFavorite(id!),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final isFavorite = snapshot.data!;
+                        return TextButton.icon(
+                          onPressed: () {
+                            _favoriteMovie(isFavorite);
+                          },
+                          icon: Icon(isFavorite
+                              ? Icons.favorite
+                              : Icons.favorite_border),
+                          label: Text(isFavorite
+                              ? 'Remove from Favorite'
+                              : 'Add to Favorite'),
+                        );
+                      }
+                      if (snapshot.hasError) {
+                        print(snapshot.error.toString());
+                        return const Text('Failed to load favorite');
+                      }
+                      return const Text('Loading');
+                    },
+                  ),
                   ListTile(
                       title: Text(movie.name),
                       subtitle: Text(movie.type),
@@ -81,14 +106,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             Icons.star,
                             color: Colors.amber,
                           ),
-                          FutureBuilder<Map<String,dynamic>>(
+                          FutureBuilder<Map<String, dynamic>>(
                             future: userProvider.getAvgRatingByMovieId(id!),
-                            builder:(context, snapshot) {
-                              if(snapshot.hasData) {
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
                                 final map = snapshot.data!;
                                 return Text('${map[avgRating] ?? 0.0}');
                               }
-                              if(snapshot.hasError) {
+                              if (snapshot.hasError) {
                                 return const Text('Error loading');
                               }
                               return const Text('Loading');
@@ -110,9 +135,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       child: RatingCommentWidget(
                         movieId: id!,
                         onComplete: () {
-                          setState(() {
-
-                          });
+                          setState(() {});
                         },
                       ),
                     ),
@@ -162,5 +185,20 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
             )
           ],
         ));
+  }
+
+  void _favoriteMovie(bool isFavorite) async {
+    final movieFavorite = MovieFavorite(
+      movieId: id!,
+      userId: userProvider.userModel.userId!,
+    );
+    if(isFavorite) {
+      await userProvider.deleteFavorite(id!);
+    } else {
+      await userProvider.insertFavorite(movieFavorite);
+    }
+    setState(() {
+
+    });
   }
 }
