@@ -7,7 +7,6 @@ import '../models/movie_rating.dart';
 import '../models/user_model.dart';
 import '../utils/utils.dart';
 
-
 class DbHelper {
   static const String createTableMovie = '''create table $tableMovie(
   $tblMovieColId integer primary key autoincrement,
@@ -69,6 +68,11 @@ class DbHelper {
     return db.insert(tableRating, movieRating.toMap());
   }
 
+  static Future<int> insertFavorite(MovieFavorite movieFavorite) async {
+    final db = await open();
+    return db.insert(tableFavorite, movieFavorite.toMap());
+  }
+
   static Future<int> updateMovie(MovieModel movieModel) async {
     final db = await open();
     return db.update(tableMovie, movieModel.toMap(),
@@ -124,6 +128,14 @@ class DbHelper {
     return db.rawQuery('select a.movie_id, a.user_id, a.rating, a.rating_date, a.user_reviews, b.email from $tableRating a inner join $tableUser b where a.user_id = b.user_id and a.movie_id = $id');
   }
 
+  static Future<bool> didUserFavorite(int movieId, int userId) async {
+    final db = await open();
+    final mapList = await db.query(tableFavorite,
+        where: '$tblFavColMovieId = ? and $tblFavColUserId = ?',
+        whereArgs: [movieId, userId]);
+    return mapList.isNotEmpty;
+  }
+
   static Future<Map<String, dynamic>> getAvgRatingByMovieId(int id) async {
     final db = await open();
     final mapList = await db.rawQuery('SELECT AVG($tblColRating) as $avgRating FROM $tableRating WHERE $tblRatingColMovieId = $id');
@@ -134,6 +146,12 @@ class DbHelper {
     final db = await open();
     return db.delete(tableMovie,
       where: '$tblMovieColId = ?', whereArgs: [id],);
+  }
 
+  static Future<int> deleteFavorite(int movieId, userId) async {
+    final db = await open();
+    return db.delete(tableFavorite,
+      where: '$tblFavColMovieId = ? and $tblFavColUserId = ?',
+      whereArgs: [movieId, userId],);
   }
 }

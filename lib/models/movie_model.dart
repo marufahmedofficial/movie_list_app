@@ -1,3 +1,5 @@
+import 'movie_favorite.dart';
+
 const String tableMovie='tbl_movie';
 const String tblMovieColId='id';
 const String tblMovieColName='name';
@@ -16,6 +18,7 @@ class MovieModel{
   int budget;
   String type;
   String release_date;
+  bool favorite;
 
   MovieModel(
       {this.id,
@@ -25,6 +28,7 @@ class MovieModel{
         required this.budget,
         required this.type,
         required this.release_date,
+        this.favorite = false,
       });
 
   Map<String,dynamic> toMap(){
@@ -49,6 +53,9 @@ class MovieModel{
     description: map[tblMovieColDes],
     budget: map[tblMovieColBudget],
     type: map[tblMovieColType],
-    release_date: map[tblMovieColRelease],);
+    release_date: map[tblMovieColRelease],
+    favorite: map[tblFavColFavorite] == null ? false :
+    map[tblFavColFavorite] == 0 ? false : true,
+  );
 
 }

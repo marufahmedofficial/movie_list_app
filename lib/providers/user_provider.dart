@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import '../db/db_helper.dart';
+import '../models/movie_favorite.dart';
 import '../models/movie_rating.dart';
 import '../models/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
   late UserModel userModel;
+
   Future<UserModel?> getUserByEmail(String email) =>
       DbHelper.getUserByEmail(email);
 
@@ -13,6 +15,9 @@ class UserProvider extends ChangeNotifier {
 
   Future<int> insertRating(MovieRating movieRating) =>
       DbHelper.insertRating(movieRating);
+
+  Future<int> insertFavorite(MovieFavorite movieFavorite) =>
+      DbHelper.insertFavorite(movieFavorite);
 
   Future<int> updateRating(MovieRating movieRating) =>
       DbHelper.updateRating(movieRating);
@@ -29,4 +34,10 @@ class UserProvider extends ChangeNotifier {
 
   Future<bool> didUserRate(int movieId) =>
       DbHelper.didUserRate(movieId, userModel.userId!);
+
+  Future<bool> didUserFavorite(int movieId) =>
+      DbHelper.didUserFavorite(movieId, userModel.userId!);
+
+  Future<int> deleteFavorite(int movieId) =>
+      DbHelper.deleteFavorite(movieId, userModel.userId!);
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../db/db_helper.dart';
 import '../models/movie_model.dart';
 
+
 class MovieProvider extends ChangeNotifier {
   List<MovieModel> movieList = [];
 
@@ -19,8 +20,8 @@ class MovieProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<MovieModel> getMovieById(int id) =>
-      DbHelper.getMovieById(id);
+  Future<MovieModel> getMovieById(int movieId) =>
+      DbHelper.getMovieById(movieId);
 
   MovieModel getMovieFromList(int id) =>
       movieList.firstWhere((element) => element.id == id);
