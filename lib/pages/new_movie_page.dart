@@ -69,7 +69,7 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
                           borderSide:
-                          BorderSide(color: Colors.blue, width: 1))),
+                          const BorderSide(color: Colors.blue, width: 1))),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This field must not be empty';

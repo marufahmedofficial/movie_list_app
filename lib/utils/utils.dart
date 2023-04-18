@@ -1,4 +1,5 @@
-List<String?> movieTypes=['Action','Sci-fi','Horror','Comedy','Thriller'];
+List<String?> movieTypes=['Action','Adventure','Sci-fi','Horror',
+  'Comedy','Thriller','Sports','Drama','Fantasy','Musical'];
 const datePattern = 'dd/MM/yyyy';
 const dateTimePattern = 'dd/MM/yyyy hh:mm:s a';
 const isLoggedIn = 'isLoggedIn';

@@ -4,7 +4,6 @@ import '../models/user_model.dart';
 import '../providers/user_provider.dart';
 import '../utils/helper_functions.dart';
 import 'launcher_page.dart';
-import '../db/db_helper.dart';
 
 
 class LoginPage extends StatefulWidget {

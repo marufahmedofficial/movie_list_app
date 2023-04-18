@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -48,8 +49,8 @@ class _RatingCommentWidgetState extends State<RatingCommentWidget> {
               allowHalfRating: true,
               itemPadding: const EdgeInsets.symmetric(horizontal: 4),
               direction: Axis.horizontal,
-              itemBuilder: (context, value) => Icon(
-                Icons.star,
+              itemBuilder: (context, value) => const Icon(
+                CupertinoIcons.star,
                 color: Colors.amber,
               ),
               onRatingUpdate: (value) {
