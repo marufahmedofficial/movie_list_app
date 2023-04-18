@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
@@ -48,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextFormField(
                           controller: emailController,
                           decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.email),
+                              prefixIcon: const Icon( CupertinoIcons.mail_solid),
                               hintText: 'Your Email',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(6),
@@ -69,14 +70,14 @@ class _LoginPageState extends State<LoginPage> {
                           obscureText: obscureText,
                           controller: passController,
                           decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.lock),
+                              prefixIcon: const Icon( CupertinoIcons.lock_fill),
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
                                     obscureText = !obscureText;
                                   });
                                 },
-                                icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
+                                icon: Icon(obscureText ? CupertinoIcons.eye_slash_fill :  CupertinoIcons.eye_fill),
                               ),
                               hintText: 'Password',
                               border: OutlineInputBorder(

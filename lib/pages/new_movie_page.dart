@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -53,7 +54,7 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
         actions: [
           IconButton(
               onPressed: saveMovie,
-              icon: Icon(id == null ? Icons.save : Icons.update))
+              icon: Icon(id == null ? CupertinoIcons.doc_checkmark_fill : Icons.save))
         ],
       ),
       body: Form(
@@ -87,7 +88,7 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
                           borderSide:
-                          BorderSide(color: Colors.blue, width: 1))),
+                          const BorderSide(color: Colors.blue, width: 1))),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This field must not be empty';
@@ -106,7 +107,7 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
                           borderSide:
-                          BorderSide(color: Colors.blue, width: 1))),
+                          const BorderSide(color: Colors.blue, width: 1))),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'This field must not be empty';
@@ -122,8 +123,8 @@ class _AddNewMoviePageState extends State<AddNewMoviePage> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(6),
                             borderSide:
-                            BorderSide(color: Colors.blue, width: 1))),
-                    hint: Text('Select Movie Type'),
+                            const BorderSide(color: Colors.blue, width: 1))),
+                    hint: const Text('Select Movie Type'),
                     items: movieTypes
                         .map((e) => DropdownMenuItem(value: e, child: Text(e!)))
                         .toList(),

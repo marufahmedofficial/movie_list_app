@@ -55,6 +55,7 @@ class _MovieListPageState extends State<MovieListPage> {
       ),
       body: Consumer<MovieProvider>(
         builder: (context, provider, child) => ListView.builder(
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           itemCount: provider.movieList.length,
           itemBuilder: (context, index) {
             final movie = provider.movieList[index];
